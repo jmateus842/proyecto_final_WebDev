@@ -35,6 +35,11 @@ app.get('/', (req, res) => {
 
 // Importar rutas y middleware
 const authRoutes = require('./routes/auth');
+const productRoutes = require('./routes/products');
+const categoryRoutes = require('./routes/categories');
+const orderRoutes = require('./routes/orders');
+const reviewRoutes = require('./routes/reviews');
+const inventoryRoutes = require('./routes/inventory');
 const errorHandler = require('./middleware/errorHandler');
 
 // Ruta de salud del sistema
@@ -48,6 +53,11 @@ app.get('/api/health', (req, res) => {
 
 // Configurar rutas de la API
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 // Middleware de manejo de errores global
 app.use(errorHandler);
