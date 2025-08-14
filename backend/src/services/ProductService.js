@@ -126,9 +126,9 @@ class ProductService {
             // Filtros basicos
             if (search) {
                 whereClause[Op.or] = [
-                    { name: { [Op.iLike]: `%${search}%` } },
-                    { description: { [Op.iLike]: `%${search}%` } },
-                    { sku: { [Op.iLike]: `%${search}%` } }
+                    { name: { [Op.like]: `%${search}%` } },
+                    { description: { [Op.like]: `%${search}%` } },
+                    { sku: { [Op.like]: `%${search}%` } }
                 ];
             }
 
@@ -349,9 +349,9 @@ class ProductService {
 
             const whereClause = {
                 [Op.or]: [
-                    { name: { [Op.iLike]: `%${searchTerm}%` } },
-                    { description: { [Op.iLike]: `%${searchTerm}%` } },
-                    { sku: { [Op.iLike]: `%${searchTerm}%` } }
+                                    { name: { [Op.like]: `%${searchTerm}%` } },
+                { description: { [Op.like]: `%${searchTerm}%` } },
+                { sku: { [Op.like]: `%${searchTerm}%` } }
                 ],
                 is_active: true
             };
@@ -575,6 +575,15 @@ class ProductService {
             }
             throw new Error('Error al obtener productos relacionados: ' + error.message);
         }
+    }
+
+    /**
+     * Obtiene todos los productos con paginacion y filtros (alias para listProducts)
+     * @param {Object} options - Opciones de paginacion y filtros
+     * @returns {Object} Lista de productos y metadata
+     */
+    static async getAllProducts(options = {}) {
+        return await this.listProducts(options);
     }
 }
 

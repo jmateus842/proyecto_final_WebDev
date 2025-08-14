@@ -100,9 +100,9 @@ class CategoryService {
             // Filtros
             if (search) {
                 whereClause[Op.or] = [
-                    { name: { [Op.iLike]: `%${search}%` } },
-                    { description: { [Op.iLike]: `%${search}%` } },
-                    { slug: { [Op.iLike]: `%${search}%` } }
+                                    { name: { [Op.like]: `%${search}%` } },
+                { description: { [Op.like]: `%${search}%` } },
+                { slug: { [Op.like]: `%${search}%` } }
                 ];
             }
 
@@ -358,9 +358,9 @@ class CategoryService {
 
             const whereClause = {
                 [Op.or]: [
-                    { name: { [Op.iLike]: `%${searchTerm}%` } },
-                    { description: { [Op.iLike]: `%${searchTerm}%` } },
-                    { slug: { [Op.iLike]: `%${searchTerm}%` } }
+                                    { name: { [Op.like]: `%${searchTerm}%` } },
+                { description: { [Op.like]: `%${searchTerm}%` } },
+                { slug: { [Op.like]: `%${searchTerm}%` } }
                 ]
             };
 
@@ -378,6 +378,16 @@ class CategoryService {
         } catch (error) {
             throw new Error('Error al buscar categorias: ' + error.message);
         }
+    }
+
+    /**
+     * Obtiene todas las categorias (alias para listActiveCategories)
+     * @param {Object} options - Opciones de filtrado
+     * @returns {Array} Lista de categorias
+     */
+    static async getAllCategories(options = {}) {
+        const { activeOnly = false } = options;
+        return await this.listActiveCategories({ includeInactive: !activeOnly });
     }
 }
 

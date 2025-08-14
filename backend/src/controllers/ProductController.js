@@ -8,6 +8,8 @@ class ProductController {
    */
   static async getAllProducts(req, res) {
     try {
+      console.log('🔍 ProductController.getAllProducts iniciado');
+      
       const {
         page = 1,
         limit = 10,
@@ -20,35 +22,46 @@ class ProductController {
         sort_order = 'DESC'
       } = req.query;
 
-      const filters = {};
-      if (search) filters.search = search;
-      if (category_id) filters.category_id = category_id;
-      if (min_price) filters.min_price = min_price;
-      if (max_price) filters.max_price = max_price;
-      if (in_stock !== undefined) filters.in_stock = in_stock === 'true';
+      console.log('📋 Query params:', req.query);
 
       const options = {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        filters,
-        sort_by,
-        sort_order
+        page: parseInt(page) || 1,
+        limit: parseInt(limit) || 10,
+        search: search || '',
+        categoryId: category_id ? parseInt(category_id) || null : null,
+        minPrice: min_price ? parseFloat(min_price) || null : null,
+        maxPrice: max_price ? parseFloat(max_price) || null : null,
+        is_active: in_stock !== undefined ? in_stock === 'true' : true,
+        sortBy: sort_by,
+        sortOrder: sort_order
       };
 
+      console.log('⚙️ Opciones:', options);
+
+      console.log('🚀 Llamando a ProductService.getAllProducts...');
       const result = await ProductService.getAllProducts(options);
+      console.log('✅ ProductService.getAllProducts completado');
+
+      console.log('📊 Resultado:', {
+        productsCount: result.products.length,
+        pagination: result.pagination
+      });
 
       res.status(200).json({
         success: true,
         data: result.products,
         pagination: {
-          current_page: result.current_page,
-          total_pages: result.total_pages,
-          total_items: result.total_items,
-          items_per_page: result.items_per_page
+          current_page: result.pagination.page,
+          total_pages: result.pagination.totalPages,
+          total_items: result.pagination.total,
+          items_per_page: result.pagination.limit
         }
       });
+      
+      console.log('✅ Respuesta enviada exitosamente');
     } catch (error) {
-      console.error('Error al obtener productos:', error);
+      console.error('❌ Error al obtener productos:', error);
+      console.error('Stack trace:', error.stack);
       res.status(500).json({
         success: false,
         error: 'Error interno del servidor'

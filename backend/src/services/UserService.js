@@ -138,10 +138,10 @@ class UserService {
             // Filtros
             if (search) {
                 whereClause[Op.or] = [
-                    { username: { [Op.iLike]: `%${search}%` } },
-                    { email: { [Op.iLike]: `%${search}%` } },
-                    { first_name: { [Op.iLike]: `%${search}%` } },
-                    { last_name: { [Op.iLike]: `%${search}%` } }
+                                    { username: { [Op.like]: `%${search}%` } },
+                { email: { [Op.like]: `%${search}%` } },
+                { first_name: { [Op.like]: `%${search}%` } },
+                { last_name: { [Op.like]: `%${search}%` } }
                 ];
             }
 
